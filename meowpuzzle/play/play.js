@@ -84,6 +84,11 @@ if (typeof document !== 'undefined') {
   // The App Store page, once the app is on sale; null shows "coming soon".
   const STORE_URL = null; // 'https://apps.apple.com/app/id6819126730'
 
+  // The Google Analytics stream these pages are counted under, that of the
+  // web app in the game's Firebase project; null counts nothing.
+  const ANALYTICS_ID = 'G-8W604HBB09';
+  const ANALYTICS_HOST = 'dourgulf.github.io';
+
   const PALETTE = [
     '#FFB2C6', '#227A66', '#FFE085', '#105081', '#654228', '#9FCA90',
     '#E49758', '#6E67A8', '#37B1BF', '#B84A47', '#ACDEFC', '#958679',
@@ -115,6 +120,10 @@ if (typeof document !== 'undefined') {
       soon: 'Coming soon to the App Store',
       pitch: 'A new puzzle every day, and hundreds of levels.',
       again: 'Play again',
+      consent: 'May we count this visit with Google Analytics? It uses cookies.',
+      privacy: 'Privacy',
+      allow: 'Allow',
+      decline: 'No thanks',
     },
     zh: {
       daily: '每日挑战',
@@ -140,6 +149,10 @@ if (typeof document !== 'undefined') {
       soon: '即将登陆 App Store',
       pitch: '每天一道新题，还有数百个关卡。',
       again: '再玩一次',
+      consent: '可以用 Google Analytics 统计这次访问吗？它会使用 cookie。',
+      privacy: '隐私政策',
+      allow: '允许',
+      decline: '不用了',
     },
   };
 
@@ -155,6 +168,88 @@ if (typeof document !== 'undefined') {
   if (still) document.documentElement.classList.add('still');
   const friendSeconds = Math.max(0, parseInt(query.get('t'), 10) || 0);
   const $ = (id) => document.getElementById(id);
+
+  // -- Counting: that the page was opened, played, solved, and the store
+  // button pressed, each with the share the visitor came from (`?s=`, which
+  // the app puts in its links). A page dressed for a screenshot or opened
+  // anywhere but on the site counts nothing. Google Analytics keeps cookies,
+  // so a visitor in Europe is asked first, and until they agree its script
+  // is not even loaded; what happened meanwhile waits in `dataLayer` and is
+  // sent if they do. A blocked script costs the player nothing.
+
+  const source = /^[a-z]{1,12}$/.test(query.get('s') || '')
+    ? query.get('s')
+    : 'direct';
+  const counts = ANALYTICS_ID && !still && location.hostname === ANALYTICS_HOST;
+  const counted = new Set();
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    window.dataLayer.push(arguments);
+  }
+
+  /// Counts [event] once for this visit, or once for each `from`.
+  function count(event, data = {}) {
+    const key = `${event} ${data.from || ''}`;
+    if (!counts || counted.has(key)) return;
+    counted.add(key);
+    gtag('event', event, { source, ...data });
+  }
+
+  // The answer to the question is the one thing the page keeps.
+  const ANSWER = 'meowpuzzle-count';
+  const answer = () => {
+    try {
+      return localStorage.getItem(ANSWER);
+    } catch (_) {
+      return null;
+    }
+  };
+  const remember = (value) => {
+    try {
+      localStorage.setItem(ANSWER, value);
+    } catch (_) {
+      // Asked again next time.
+    }
+  };
+
+  function startCounting() {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_ID}`;
+    document.head.appendChild(script);
+  }
+
+  function askToCount() {
+    const bar = document.createElement('aside');
+    bar.id = 'consent';
+    bar.innerHTML =
+      `<p>${text.consent} <a href="../../privacy.html">${text.privacy}</a></p>` +
+      `<div><button type="button" value="no">${text.decline}</button>` +
+      `<button type="button" value="yes">${text.allow}</button></div>`;
+    bar.addEventListener('click', (event) => {
+      const choice = event.target.value;
+      if (choice !== 'yes' && choice !== 'no') return;
+      remember(choice);
+      bar.remove();
+      if (choice === 'yes') startCounting();
+    });
+    document.querySelector('main').prepend(bar);
+  }
+
+  if (counts) {
+    gtag('js', new Date());
+    // The visit, under an address without the friend's time: one line per
+    // board and source in the report.
+    gtag('config', ANALYTICS_ID, {
+      page_location: `${location.origin}${location.pathname}?s=${source}`,
+      source,
+    });
+    // Europe, by the zone of the visitor's clock.
+    const zone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    const asks = /^(Europe|Atlantic|Arctic)\//.test(zone);
+    if (!asks || answer() === 'yes') startCounting();
+    else if (answer() !== 'no') askToCount();
+  }
 
   const clock = (seconds) =>
     `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
@@ -278,6 +373,7 @@ if (typeof document !== 'undefined') {
   function begin() {
     if (started !== null) return;
     started = Date.now();
+    count('play_start');
     timer = setInterval(() => ($('time').textContent = clock(seconds())), 500);
   }
 
@@ -339,6 +435,7 @@ if (typeof document !== 'undefined') {
     clearInterval(timer);
     const mine = seconds();
     $('time').textContent = clock(mine);
+    count('play_solved', { seconds: mine, mistakes });
     $('solved').textContent =
       `${text.solvedIn(clock(mine))} · ${text.mistakes(mistakes)}`;
     $('versus').textContent = !friendSeconds ? ''
@@ -443,6 +540,10 @@ if (typeof document !== 'undefined') {
     link.textContent = STORE_URL ? text.get : text.soon;
     if (STORE_URL) link.href = STORE_URL;
     else link.setAttribute('aria-disabled', 'true');
+    // "Coming soon" takes no presses: this counts once the app is on sale.
+    link.addEventListener('click', () =>
+      count('store_click', { from: link.closest('#won') ? 'won' : 'page' }),
+    );
   }
   $('again').addEventListener('click', reset);
   document.documentElement.lang = text === TEXT.zh ? 'zh' : 'en';

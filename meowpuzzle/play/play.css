@@ -312,6 +312,32 @@ figcaption {
   font-weight: 700;
 }
 
+/* The question a visitor in Europe is asked before the visit is counted. It
+   heads the page and pushes the rest down: over the foot of the page it
+   would lie on the board wherever the browser's bars leave a short window. */
+#consent {
+  margin: 0 12px 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: 0 4px 16px rgb(73 53 63 / .12);
+  font-size: 13px;
+  color: var(--text);
+}
+#consent p { margin: 0 0 10px; }
+#consent a { color: var(--text-secondary); }
+#consent div { display: flex; gap: 8px; }
+#consent button {
+  flex: 1;
+  min-height: 44px;
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--action-ink);
+  font: inherit;
+  font-weight: 700;
+}
+
 /* At rest, for a screenshot. */
 .still *, .still *::before { animation: none !important; transition: none !important; }
 
