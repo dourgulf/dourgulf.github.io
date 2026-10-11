@@ -100,6 +100,8 @@ if (typeof document !== 'undefined') {
       daily: 'Daily Challenge',
       goal: (n) => `Find all ${n} cats`,
       friend: (time) => `A friend solved this in ${time}. Can you beat it?`,
+      help: 'A friend is stuck on this one. Can you finish it?',
+      helped: 'You cracked the one your friend was stuck on!',
       rules: ['One color, one cat', 'One cat per row & column', 'Cats cannot touch'],
       refused: {
         color: 'One color, one cat',
@@ -129,6 +131,8 @@ if (typeof document !== 'undefined') {
       daily: '每日挑战',
       goal: (n) => `找出全部 ${n} 只猫`,
       friend: (time) => `朋友用了 ${time} 解开这一题，你能更快吗？`,
+      help: '朋友卡在这一题了，你能解开吗？',
+      helped: '朋友卡住的这一题，被你解开了！',
       rules: ['每种颜色一只猫', '每行每列一只猫', '猫咪不能相邻'],
       refused: {
         color: '每种颜色一只猫',
@@ -167,6 +171,15 @@ if (typeof document !== 'undefined') {
   const still = query.has('still') || query.has('og');
   if (still) document.documentElement.classList.add('still');
   const friendSeconds = Math.max(0, parseInt(query.get('t'), 10) || 0);
+  // `?c=2-7-----`: the cats a friend who is stuck has found, as the column
+  // of each row's cat, `-` for a row without one. Only those that are the
+  // answer are taken, so a made-up link gives nothing away and breaks
+  // nothing; the board then starts from them, and starts over from them.
+  const found = [...(query.get('c') || '')]
+    .map((column, row) => [row, parseInt(column, 36)])
+    .filter(([row, column]) => level.cats[row] === column);
+  // A board handed over whole would be won before it was touched.
+  const helping = found.length > 0 && found.length < level.size;
   const $ = (id) => document.getElementById(id);
 
   // -- Counting: that the page was opened, played, solved, and the store
@@ -348,6 +361,7 @@ if (typeof document !== 'undefined') {
     $('time').textContent = '0:00';
     document.body.classList.remove('won');
     for (const row of tiles) for (const tile of row) tile.innerHTML = '';
+    if (helping) for (const [row, column] of found) set(row, column, CAT);
     showCount();
   }
 
@@ -438,7 +452,8 @@ if (typeof document !== 'undefined') {
     count('play_solved', { seconds: mine, mistakes });
     $('solved').textContent =
       `${text.solvedIn(clock(mine))} · ${text.mistakes(mistakes)}`;
-    $('versus').textContent = !friendSeconds ? ''
+    $('versus').textContent = helping ? text.helped
+      : !friendSeconds ? ''
       : mine < friendSeconds ? text.faster(span(friendSeconds - mine))
       : mine > friendSeconds ? text.slower(span(mine - friendSeconds))
       : text.tie;
@@ -522,8 +537,8 @@ if (typeof document !== 'undefined') {
   // -- Words
 
   $('daily').textContent = text.daily;
-  $('goal').textContent = friendSeconds
-    ? text.friend(clock(friendSeconds))
+  $('goal').textContent = helping ? text.help
+    : friendSeconds ? text.friend(clock(friendSeconds))
     : text.goal(level.size);
   $('rules').innerHTML = text.rules.map((rule) => `<li>${rule}</li>`).join('');
   $('gestures').innerHTML =
