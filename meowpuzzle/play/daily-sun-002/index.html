@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MeowPuzzle · Daily Challenge</title>
+<meta name="description" content="Can you find all 9 cats? Play this MeowPuzzle daily challenge in your browser.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MeowPuzzle">
+<meta property="og:title" content="MeowPuzzle · Daily Challenge">
+<meta property="og:description" content="Can you find all 9 cats? Play it right here.">
+<meta property="og:url" content="https://dourgulf.github.io/meowpuzzle/play/daily-sun-002/">
+<meta property="og:image" content="https://dourgulf.github.io/meowpuzzle/play/daily-sun-002/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FFF9F3">
+<link rel="icon" href="../logo.png">
+<link rel="stylesheet" href="../play.css">
+
+<main>
+  <header>
+    <img src="../logo.png" alt="" width="36" height="36">
+    <strong>MeowPuzzle</strong>
+    <span id="daily"></span>
+  </header>
+
+  <p id="goal"></p>
+  <ul id="rules"></ul>
+
+  <div id="status">
+    <span class="pill"><svg viewBox="0 0 1 1" aria-hidden="true"><use href="#paw"/></svg><b id="count"></b></span>
+    <span class="pill"><b id="time"></b></span>
+  </div>
+
+  <div id="board-frame">
+    <div id="board" role="application" aria-label="Puzzle board"></div>
+    <div id="toast" role="status"></div>
+  </div>
+
+  <p id="gestures"></p>
+
+  <footer>
+    <span id="pitch"></span>
+    <a class="store"></a>
+  </footer>
+</main>
+
+<section id="won" aria-live="polite">
+  <div class="rays"></div>
+  <div class="won-body">
+    <h1 id="won-title"></h1>
+    <p id="won-sub"></p>
+    <p id="solved"></p>
+    <p id="versus"></p>
+    <figure>
+      <img src="../story.jpg" alt="" width="720" height="720">
+      <figcaption id="story"></figcaption>
+    </figure>
+    <a class="store button"></a>
+    <button id="again" type="button"></button>
+  </div>
+</section>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="paw" viewBox="0 0 1 1">
+    <path d="M.5 .45C.67 .45 .82 .66 .8 .79C.78 .92 .63 .92 .5 .87C.37 .92 .22 .92 .2 .79C.18 .66 .33 .45 .5 .45Z"/>
+    <ellipse cx=".14" cy=".42" rx=".095" ry=".125" transform="rotate(-25.8 .14 .42)"/>
+    <ellipse cx=".35" cy=".2" rx=".095" ry=".125" transform="rotate(-8.6 .35 .2)"/>
+    <ellipse cx=".65" cy=".2" rx=".095" ry=".125" transform="rotate(8.6 .65 .2)"/>
+    <ellipse cx=".86" cy=".42" rx=".095" ry=".125" transform="rotate(25.8 .86 .42)"/>
+  </symbol>
+</svg>
+
+<script>
+  window.MEOW_PUZZLE = {"id":"daily-sun-002","regions":["555566666","555666664","535000661","530000011","330000011","333000221","333872222","388872222","333888822"],"cats":"580271463","picture":true};
+</script>
+<script src="../play.js"></script>
+</html>
