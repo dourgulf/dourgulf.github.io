@@ -341,21 +341,21 @@ figcaption {
 /* At rest, for a screenshot. */
 .still *, .still *::before { animation: none !important; transition: none !important; }
 
-/* The link preview, 1200 × 630: the board beside the name. A preview is
-   shown small, so it carries the board and one line. */
+/* The link preview, 1200 × 630. A chat shows it small, and some crop it to
+   its middle square: everything sits in that square, the board largest. */
 .og main {
   max-width: none;
   width: 1200px;
   height: 630px;
   min-height: 0;
   padding: 0;
-  display: grid;
-  grid-template: ". board" 1fr "head board" auto "goal board" auto ". board" 1fr / 1fr 630px;
-  background: radial-gradient(circle at 24% 46%, #FFEFC4, var(--background) 62%);
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 46%, #FFEFC4, var(--background) 62%);
 }
-.og #board-frame { grid-area: board; margin: 45px; align-self: center; }
-.og header { grid-area: head; padding: 0 0 0 64px; gap: 18px; }
-.og header img { width: 76px; height: 76px; border-radius: 17px; }
-.og header strong { font-size: 46px; }
-.og #goal { grid-area: goal; margin: 36px 0 0 64px; font-size: 68px; font-weight: 800; line-height: 1.1; text-align: left; }
+.og #goal { order: 1; margin: 0 0 18px; font-size: 54px; font-weight: 800; line-height: 1.1; }
+.og #board-frame { order: 2; width: 424px; margin: 0; }
+.og header { order: 3; margin-top: 20px; padding: 0; gap: 12px; }
+.og header img { width: 44px; height: 44px; border-radius: 10px; }
+.og header strong { font-size: 30px; }
 .og header span, .og #rules, .og #status, .og #gestures, .og footer, .og #won { display: none; }
