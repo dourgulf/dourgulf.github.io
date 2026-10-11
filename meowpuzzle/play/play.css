@@ -14,7 +14,8 @@
 
 * { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+/* No double-tap zoom anywhere: a tap beside the board is a missed cell. */
+html { -webkit-text-size-adjust: 100%; touch-action: manipulation; }
 
 body {
   margin: 0;

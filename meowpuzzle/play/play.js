@@ -413,6 +413,15 @@ if (typeof document !== 'undefined') {
   });
   board.addEventListener('pointercancel', () => (press = null));
 
+  // A double tap places a cat; it must not also zoom the page. iOS Safari
+  // zooms on one unless the touches themselves are cancelled, whatever
+  // `touch-action` says. Pointer events still arrive.
+  for (const type of ['touchstart', 'touchend', 'dblclick']) {
+    board.addEventListener(type, (event) => event.preventDefault(), {
+      passive: false,
+    });
+  }
+
   // -- Words
 
   $('daily').textContent = text.daily;
