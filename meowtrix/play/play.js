@@ -82,11 +82,11 @@ if (typeof module !== 'undefined') {
 
 if (typeof document !== 'undefined') {
   // The App Store page, once the app is on sale; null shows "coming soon".
-  const STORE_URL = null; // 'https://apps.apple.com/app/id6822615224'
+  const STORE_URL = null; // 'https://apps.apple.com/app/id6819126730'
 
   // The Google Analytics stream these pages are counted under, that of the
   // web app in the game's Firebase project; null counts nothing.
-  const ANALYTICS_ID = 'G-FJGXHHH0G6';
+  const ANALYTICS_ID = 'G-8W604HBB09';
   const ANALYTICS_HOST = 'dourgulf.github.io';
 
   const PALETTE = [
