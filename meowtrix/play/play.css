@@ -40,8 +40,8 @@ header {
   gap: 10px;
   padding: 0 16px;
 }
-header img { border-radius: 9px; }
-header strong { font-size: 19px; font-weight: 800; letter-spacing: -.3px; }
+header .app-icon { border-radius: 9px; flex-shrink: 0; }
+header .wordmark { width: 170px; height: auto; min-width: 0; object-fit: contain; }
 header span { margin-left: auto; font-size: 13px; color: var(--text-secondary); }
 
 #goal {
@@ -356,6 +356,6 @@ figcaption {
 .og #goal { order: 1; margin: 0 0 18px; font-size: 54px; font-weight: 800; line-height: 1.1; }
 .og #board-frame { order: 2; width: 424px; margin: 0; }
 .og header { order: 3; margin-top: 20px; padding: 0; gap: 12px; }
-.og header img { width: 44px; height: 44px; border-radius: 10px; }
-.og header strong { font-size: 30px; }
+.og header .app-icon { width: 44px; height: 44px; border-radius: 10px; }
+.og header .wordmark { width: 250px; height: auto; }
 .og header span, .og #rules, .og #status, .og #gestures, .og footer, .og #won { display: none; }

@@ -81,8 +81,8 @@ if (typeof module !== 'undefined') {
 // ---- Page ------------------------------------------------------------------
 
 if (typeof document !== 'undefined') {
-  // The App Store page, once the app is on sale; null shows "coming soon".
-  const STORE_URL = null; // 'https://apps.apple.com/app/id6819126730'
+  // Meowtrix retains the original App Store identity after the rename.
+  const STORE_URL = 'https://apps.apple.com/app/id6819126730';
 
   // The Google Analytics stream these pages are counted under, that of the
   // web app in the game's Firebase project; null counts nothing.
