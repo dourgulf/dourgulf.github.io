@@ -182,20 +182,36 @@ header span { margin-left: auto; font-size: 13px; color: var(--text-secondary); 
 #gestures b { color: var(--text); font-weight: 700; }
 #gestures span { margin: 0 8px; }
 
-footer {
-  margin: auto 16px 0;
-  padding-top: 24px;
+.app-download {
+  margin: 14px 16px 0;
+  padding: 10px 12px;
+  border: 1px solid var(--divider);
+  border-radius: 14px;
+  background: var(--surface);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 4px;
+  gap: 12px;
   font-size: 13px;
   color: var(--text-secondary);
   text-align: center;
 }
-footer .store { color: var(--action-ink); font-weight: 700; text-decoration: none; }
+.app-download #pitch { flex: 1; text-align: start; }
+.app-download .store {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--action-ink);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
 .store[aria-disabled] { pointer-events: none; }
-footer .store[aria-disabled] { color: var(--text-secondary); font-weight: 600; }
+.app-download .store[aria-disabled] { color: var(--text-secondary); font-weight: 600; }
 
 /* The result: the warm glow and rays of the app's celebration. */
 #won {
@@ -358,4 +374,4 @@ figcaption {
 .og header { order: 3; margin-top: 20px; padding: 0; gap: 12px; }
 .og header .app-icon { width: 44px; height: 44px; border-radius: 10px; }
 .og header .wordmark { width: 250px; height: auto; }
-.og header span, .og #rules, .og #status, .og #gestures, .og footer, .og #won { display: none; }
+.og header span, .og #rules, .og #status, .og #gestures, .og .app-download, .og #won { display: none; }
